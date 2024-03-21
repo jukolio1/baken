@@ -11,7 +11,7 @@ const pool = new pg.Pool({
 });
 
 app.get('/', (req, res) => {
- res.send('Hola Hola');
+ res.send('Hello');
 });
 
 app.get('/ping', async (req, res) => {
