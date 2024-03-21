@@ -1,23 +1,29 @@
-import  express  from "express";
-import {config} from 'dotenv'
-import pg  from 'pg'
+import express from "express";
+import { config } from 'dotenv';
+import pg from 'pg';
 
-config()
+config();
 
-const app =  express()
-  const pool =  new pg.Pool({
-connectionString: process.env.DATABASE_URL,
-ssl: false
+const app = express();
+const pool = new pg.Pool({
+ connectionString: process.env.DATABASE_URL,
+ ssl: false
+});
 
-})
-app.get('/',(req,res) => {
-    res.send('Hola Hola')
-})
+app.get('/', (req, res) => {
+ res.send('Hola Hola');
+});
 
-app.get('/ping', async (req,res) => {
-    const result = await pool.query( 'SELEC NOW()')
-    return res.jason(result.rows[0])
-})
+app.get('/ping', async (req, res) => {
+ try {
+    const result = await pool.query('SELECT NOW()');
+    return res.json(result.rows[0]);
+ } catch (error) {
+    console.error('Error al realizar la consulta:', error);
+    return res.status(500).json({ error: 'Error al realizar la consulta' });
+ }
+});
 
-app.listen(3000)
-console.log('Server on port',3000)
+app.listen(3000, () => {
+ console.log('Server on port', 3000);
+});
